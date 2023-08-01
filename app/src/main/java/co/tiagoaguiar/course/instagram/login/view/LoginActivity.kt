@@ -2,6 +2,8 @@ package co.tiagoaguiar.course.instagram.login.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
@@ -20,13 +22,21 @@ class LoginActivity : AppCompatActivity() {
     editTextEmail.addTextChangedListener(watcher)
     editTextPassword.addTextChangedListener(watcher)
 
-    findViewById<Button>(R.id.login_btn_enter).setOnClickListener {
+    val buttonEnter = findViewById<LoadingButton>(R.id.login_btn_enter)
+
+    buttonEnter.setOnClickListener {
+
+      buttonEnter.showProgress(true)
 
       findViewById<TextInputLayout>(R.id.login_edit_email_input)
         .error = "e-mail inválido!"
 
       findViewById<TextInputLayout>(R.id.login_edit_password_input)
         .error = "senha incorreta!"
+
+      Handler(Looper.getMainLooper()).postDelayed({
+        buttonEnter.showProgress(false)
+      }, 2000)
     }
 
   }
@@ -37,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-      findViewById<Button>(R.id.login_btn_enter).isEnabled = s.toString().isNotEmpty()
+      findViewById<LoadingButton>(R.id.login_btn_enter).isEnabled = s.toString().isNotEmpty()
     }
 
     override fun afterTextChanged(s: Editable?) {

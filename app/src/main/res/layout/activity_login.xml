@@ -57,11 +57,11 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <Button
+            <co.tiagoaguiar.course.instagram.login.view.LoadingButton
                 android:id="@+id/login_btn_enter"
-                android:enabled="false"
-                style="@style/Theme.Instagram.Button"
-                android:text="@string/enter" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:text="@string/enter" />
 
             <FrameLayout
                 style="@style/Theme.Instagram.FormContainer"
