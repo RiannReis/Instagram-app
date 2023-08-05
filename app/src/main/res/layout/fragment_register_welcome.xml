@@ -21,32 +21,12 @@
             android:orientation="vertical"
             android:paddingBottom="70dp">
 
-            <ImageView
-                android:id="@+id/login_img_logo"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="48dp"
-                android:contentDescription="@null"
-                android:src="@drawable/photo_icon" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/register_edit_email_input"
-                style="@style/Theme.Instagram.FormEditTextInput"
-                app:hintEnabled="false">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/register_edit_email"
-                    style="@style/Theme.Instagram.FormEditText"
-                    android:autofillHints="@null"
-                    android:hint="@string/email"
-                    android:inputType="textEmailAddress" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
+            <TextView
+                android:text="@string/welcome_to_instagram"
+                style="@style/Theme.Instagram.TextViewBase.Form"/>
 
             <co.tiagoaguiar.course.instagram.login.view.LoadingButton
-                android:id="@+id/register_btn_next"
+                android:id="@+id/register_welcome_btn_next"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:text="@string/next" />
@@ -55,23 +35,15 @@
 
     </ScrollView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray_darker"
-        app:layout_constraintBottom_toTopOf="@id/register_txt_email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <TextView
-        android:id="@+id/register_txt_email"
+        android:id="@+id/register_txt_terms"
         style="@style/Theme.Instagram.TextViewBase"
         android:layout_width="match_parent"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:background="@color/white"
         android:padding="24dp"
-        android:text="@string/already_has_account"
+        android:text="@string/agree_terms_policy"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
