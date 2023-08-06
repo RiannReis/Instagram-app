@@ -22,7 +22,7 @@
             android:paddingBottom="70dp">
 
             <ImageView
-                android:id="@+id/login_img_logo"
+                android:id="@+id/login_img_logo_photo"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center_horizontal"
@@ -44,10 +44,15 @@
                 style="@style/Theme.Instagram.TextViewBase.Form"/>
 
             <co.tiagoaguiar.course.instagram.login.view.LoadingButton
-                android:id="@+id/register_btn_next"
+                android:id="@+id/register_btn_photo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:text="@string/next" />
+                app:text="@string/add_photo" />
+
+            <Button
+                android:id="@+id/register_btn_jump"
+                android:text="@string/jump"
+                style="@style/Theme.Instagram.Link"/>
 
         </LinearLayout>
 
