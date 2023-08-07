@@ -43,4 +43,7 @@
     <string name="logout_action">Sair</string>
     <string name="cancel">Cancel</string>
     <string name="favorites">favoritos</string>
+    <string name="profile">perfil</string>
+    <string name="grid">fotos em grade</string>
+    <string name="list">fotos em lista</string>
 </resources>

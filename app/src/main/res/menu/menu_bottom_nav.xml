@@ -17,7 +17,7 @@
         android:icon="@drawable/ic_insta_heart"/>
 
     <item android:id="@+id/menu_bottom_profile"
-        android:title="@string/edit_profile"
+        android:title="@string/profile"
         android:icon="@drawable/ic_insta_profile"/>
 
 </menu>
