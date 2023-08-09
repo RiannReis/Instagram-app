@@ -6,14 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".main.view.MainActivity">
 
-    <fragment
-        android:id="@+id/main_fragment"
-        android:name="co.tiagoaguiar.course.instagram.profile.view.FragmentProfile"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/main_bottom_nav"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/fragment_profile" />
+        app:layout_constraintBottom_toTopOf="@id/main_bottom_nav">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white">
+
+            <Toolbar
+                app:layout_scrollFlags="scroll|enterAlways"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:title="@string/app_name" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <fragment
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:id="@+id/main_fragment"
+            android:name="co.tiagoaguiar.course.instagram.profile.view.FragmentProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_profile" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/main_bottom_nav"
