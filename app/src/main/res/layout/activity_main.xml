@@ -37,10 +37,10 @@
         <fragment
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:id="@+id/main_fragment"
-            android:name="co.tiagoaguiar.course.instagram.search.view.FragmentSearch"
+            android:name="co.tiagoaguiar.course.instagram.camera.view.FragmentCamera"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:layout="@layout/fragment_search" />
+            tools:layout="@layout/fragment_camera" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
