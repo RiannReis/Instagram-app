@@ -40,7 +40,7 @@
             android:name="co.tiagoaguiar.course.instagram.camera.view.FragmentCamera"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:layout="@layout/fragment_camera" />
+            tools:layout="@layout/fragment_gallery" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
