@@ -8,11 +8,13 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import co.tiagoaguiar.course.instagram.R
+import co.tiagoaguiar.course.instagram.common.util.TxtWatcher
 import co.tiagoaguiar.course.instagram.databinding.ActivityLoginBinding
+import co.tiagoaguiar.course.instagram.login.Login
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), Login.View {
 
   private lateinit var binding: ActivityLoginBinding
 
@@ -28,31 +30,36 @@ class LoginActivity : AppCompatActivity() {
 
     binding.loginBtnEnter.setOnClickListener {
 
-      binding.loginBtnEnter.showProgress(true)
-
-      binding.loginEditEmailInput.error = "e-mail inválido!"
-
-      binding.loginEditPasswordInput.error = "senha incorreta!"
-
-      Handler(Looper.getMainLooper()).postDelayed({
-        binding.loginBtnEnter.showProgress(false)
-      }, 2000)
+      // CHAMAR O PRESENTER
+//
+//      Handler(Looper.getMainLooper()).postDelayed({
+//        binding.loginBtnEnter.showProgress(false)
+//      }, 2000)
     }
 
   }
 
-  private val watcher = object: TextWatcher{
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+  private val watcher = TxtWatcher {
+    binding.loginBtnEnter.isEnabled = it.isNotEmpty()
+  }
 
-    }
+  override fun showProgress(enabled: Boolean) {
+    binding.loginBtnEnter.showProgress(enabled)
+  }
 
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-      binding.loginBtnEnter.isEnabled = s.toString().isNotEmpty()
-    }
+  override fun displayEmailFailure(emailError: Int?) {
+    binding.loginEditEmailInput.error = emailError?.let { getString(it) }
+  }
 
-    override fun afterTextChanged(s: Editable?) {
+  override fun displayPasswordFailure(passwordError: Int?) {
+    binding.loginEditPasswordInput.error = passwordError?.let { getString(it) }
+  }
 
-    }
+  override fun onUserAuthenticated() {
+    //IR PRA TELA PRINCIPAL
+  }
 
+  override fun onUserUnauthorized() {
+    //MOSTRAR ALERTA
   }
 }
