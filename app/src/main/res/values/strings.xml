@@ -46,4 +46,5 @@
     <string name="profile">perfil</string>
     <string name="grid">fotos em grade</string>
     <string name="list">fotos em lista</string>
+    <string name="invalid_password">A senha deve ter ao menos 8 caracteres</string>
 </resources>

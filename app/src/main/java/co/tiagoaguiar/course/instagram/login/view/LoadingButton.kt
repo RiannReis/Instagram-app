@@ -49,7 +49,7 @@ class LoadingButton : FrameLayout {
         button.setOnClickListener(l)
     }
 
-    public fun showProgress(enabled: Boolean){
+    fun showProgress(enabled: Boolean){
         if (enabled){
             button.text = ""
             button.isEnabled = false
