@@ -1,11 +1,16 @@
 package co.tiagoaguiar.course.instagram.login.view
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import co.tiagoaguiar.course.instagram.common.util.TxtWatcher
 import co.tiagoaguiar.course.instagram.databinding.ActivityLoginBinding
 import co.tiagoaguiar.course.instagram.login.Login
+import co.tiagoaguiar.course.instagram.login.data.FakeDataSource
+import co.tiagoaguiar.course.instagram.login.data.LoginRepository
 import co.tiagoaguiar.course.instagram.login.presentation.LoginPresenter
+import co.tiagoaguiar.course.instagram.main.view.MainActivity
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
@@ -20,7 +25,8 @@ class LoginActivity : AppCompatActivity(), Login.View {
 
         setContentView(binding.root)
 
-        presenter = LoginPresenter(this)
+        val repository = LoginRepository(FakeDataSource())
+        presenter = LoginPresenter(this, repository)
 
         with(binding) {
             loginEditEmail.addTextChangedListener(watcher)
@@ -36,9 +42,6 @@ class LoginActivity : AppCompatActivity(), Login.View {
             loginBtnEnter.setOnClickListener {
                 presenter.login(loginEditEmail.text.toString(), loginEditPassword.text.toString())
 
-//      Handler(Looper.getMainLooper()).postDelayed({
-//        loginBtnEnter.showProgress(false)
-//      }, 2000)
             }
         }
     }
@@ -66,10 +69,12 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun onUserAuthenticated() {
-        //IR PRA TELA PRINCIPAL
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
-    override fun onUserUnauthorized() {
-        //MOSTRAR ALERTA
+    override fun onUserUnauthorized(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }
