@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import co.tiagoaguiar.course.instagram.R
+import co.tiagoaguiar.course.instagram.common.base.DependencyInjector
 import co.tiagoaguiar.course.instagram.common.util.TxtWatcher
 import co.tiagoaguiar.course.instagram.databinding.FragmentRegisterEmailBinding
 import co.tiagoaguiar.course.instagram.register.RegisterEmail
+import co.tiagoaguiar.course.instagram.register.presentation.RegisterEmailPresenter
 
 class RegisterEmailFragment : Fragment(R.layout.fragment_register_email), RegisterEmail.View {
 
@@ -20,6 +22,9 @@ class RegisterEmailFragment : Fragment(R.layout.fragment_register_email), Regist
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentRegisterEmailBinding.bind(view)
+
+        val repository = DependencyInjector.registerEmailRepository()
+        presenter = RegisterEmailPresenter(this, repository)
 
         binding?.let {
             with(it){
@@ -44,7 +49,7 @@ class RegisterEmailFragment : Fragment(R.layout.fragment_register_email), Regist
 
     override fun onDestroy() {
         binding = null
-        // presenter.onDestroy()
+        presenter.onDestroy()
         super.onDestroy()
     }
 
@@ -52,6 +57,19 @@ class RegisterEmailFragment : Fragment(R.layout.fragment_register_email), Regist
         binding?.registerBtnNext?.isEnabled = binding?.registerEditEmail?.text.toString().isNotEmpty()
     }
 
+    override fun showProgress(enabled: Boolean) {
+        binding?.registerBtnNext?.showProgress(enabled)
+    }
+
     override fun displayEmailFailure(emailError: Int?) {
+        binding?.registerEditEmailInput?.error = emailError?.let { getString(it) }
+    }
+
+    override fun onEmailFailure(message: String) {
+        binding?.registerEditEmailInput?.error = message
+    }
+
+    override fun goToNameAndPasswordScreen(email: String) {
+        // depois mandamos para o próximo fragment
     }
 }
