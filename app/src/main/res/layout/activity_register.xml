@@ -7,11 +7,10 @@
     android:orientation="vertical"
     tools:context=".register.view.RegisterActivity">
     
-    <fragment
+    <FrameLayout
         android:id="@+id/register_fragment"
-        android:name="co.tiagoaguiar.course.instagram.register.view.RegisterPhotoFragment"
         android:layout_width="match_parent"
-        tools:layout="@layout/fragment_register_photo"
+        tools:layout="@layout/fragment_register_email"
         android:layout_height="match_parent"/>
 
 </LinearLayout>

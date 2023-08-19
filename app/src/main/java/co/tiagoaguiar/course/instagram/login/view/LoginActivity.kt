@@ -8,10 +8,9 @@ import co.tiagoaguiar.course.instagram.common.base.DependencyInjector
 import co.tiagoaguiar.course.instagram.common.util.TxtWatcher
 import co.tiagoaguiar.course.instagram.databinding.ActivityLoginBinding
 import co.tiagoaguiar.course.instagram.login.Login
-import co.tiagoaguiar.course.instagram.login.data.FakeDataSource
-import co.tiagoaguiar.course.instagram.login.data.LoginRepository
 import co.tiagoaguiar.course.instagram.login.presentation.LoginPresenter
 import co.tiagoaguiar.course.instagram.main.view.MainActivity
+import co.tiagoaguiar.course.instagram.register.view.RegisterActivity
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
@@ -41,7 +40,10 @@ class LoginActivity : AppCompatActivity(), Login.View {
 
             loginBtnEnter.setOnClickListener {
                 presenter.login(loginEditEmail.text.toString(), loginEditPassword.text.toString())
+            }
 
+            loginTxtRegister.setOnClickListener {
+                goToRegisterScreen()
             }
         }
     }
@@ -54,6 +56,10 @@ class LoginActivity : AppCompatActivity(), Login.View {
     private val watcher = TxtWatcher {
         binding.loginBtnEnter.isEnabled = binding.loginEditEmail.text.toString().isNotEmpty()
                 && binding.loginEditPassword.text.toString().isNotEmpty()
+    }
+
+    private fun goToRegisterScreen(){
+        startActivity(Intent(this, RegisterActivity::class.java))
     }
 
     override fun showProgress(enabled: Boolean) {
