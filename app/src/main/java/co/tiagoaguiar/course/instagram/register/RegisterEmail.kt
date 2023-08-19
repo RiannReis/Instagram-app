@@ -7,7 +7,7 @@ import co.tiagoaguiar.course.instagram.common.base.BaseView
 interface RegisterEmail {
 
     interface Presenter : BasePresenter{
-
+        fun create(email: String)
     }
 
     interface View : BaseView<Presenter>{
