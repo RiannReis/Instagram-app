@@ -12,13 +12,9 @@ interface RegisterNameAndPassword {
 
     interface View : BaseView<Presenter> {
         fun showProgress(enabled: Boolean)
-
         fun displayNameFailure(@StringRes nameError: Int?)
-
         fun displayPasswordFailure(@StringRes passwordError: Int?)
-
         fun onCreateFailure(message: String)
-
         fun onCreateSuccess(name: String)
     }
 }
