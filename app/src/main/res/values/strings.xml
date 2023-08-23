@@ -47,4 +47,5 @@
     <string name="grid">fotos em grade</string>
     <string name="list">fotos em lista</string>
     <string name="invalid_password">A senha deve ter ao menos 8 caracteres</string>
+    <string name="invalid_name">Nome deve ter ao menos 3 caracteres</string>
 </resources>
