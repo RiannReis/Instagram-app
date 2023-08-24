@@ -68,7 +68,7 @@ class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo) {
         customDialog.addButton(R.string.photo, R.string.gallery) {
             when (it.id) {
                 R.string.photo -> {
-                    Log.i("teste", "foto")
+                    fragmentAttachListener?.goToCameraScreen()
                 }
                 R.string.gallery -> {
                     fragmentAttachListener?.goToGalleryScreen()
@@ -77,13 +77,6 @@ class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo) {
         }
         customDialog.show()
     }
-
-    //MODO MAIS SIMPLES:
-//    private fun onCropImageResult(uri: Uri?) {
-//        if (uri != null) {
-//            binding?.registerImgProfile?.setImageURI(uri)
-//        }
-//    }
 
     private fun onCropImageResult(uri: Uri?) {
         if (uri != null) {

@@ -3,9 +3,12 @@ package co.tiagoaguiar.course.instagram.register.view
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import co.tiagoaguiar.course.instagram.R
 import co.tiagoaguiar.course.instagram.common.view.CropperImageFragment
@@ -14,10 +17,16 @@ import co.tiagoaguiar.course.instagram.databinding.ActivityRegisterBinding
 import co.tiagoaguiar.course.instagram.main.view.MainActivity
 import co.tiagoaguiar.course.instagram.register.view.RegisterNamePasswordFragment.Companion.KEY_EMAIL
 import co.tiagoaguiar.course.instagram.register.view.RegisterWelcomeFragment.Companion.KEY_NAME
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.jvm.Throws
 
 class RegisterActivity : AppCompatActivity(), FragmentAttachListener {
 
     private lateinit var binding: ActivityRegisterBinding
+    private lateinit var currentPhoto: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,16 +61,45 @@ class RegisterActivity : AppCompatActivity(), FragmentAttachListener {
     }
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        val fragment = CropperImageFragment().apply {
-            arguments = Bundle().apply {
-                putParcelable(KEY_URI, uri)
-            }
-        }
-        replaceFragment(fragment)
+        uri?.let { openImageCropper(it) }
     }
 
     override fun goToGalleryScreen() {
         getContent.launch("image/*")
+    }
+
+    private val getCamera = registerForActivityResult(ActivityResultContracts.TakePicture()) { saved ->
+        if (saved) {
+            openImageCropper(currentPhoto)
+        }
+    }
+
+    override fun goToCameraScreen() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (intent.resolveActivity(packageManager) != null) {
+
+            val photoFile: File? = try {
+                createImageFile()
+
+            } catch (e: IOException){
+                Log.e("RegisterActivity", e.message, e)
+                null
+            }
+
+            photoFile?.also {
+                val photoUri = FileProvider.getUriForFile(this, "co.tiagoaguiar.course.instagram.fileprovider", it)
+                currentPhoto = photoUri
+
+                getCamera.launch(photoUri)
+            }
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile("JPEG_${timeStamp}", ".jpg", dir)
     }
 
     override fun goToWelcomeScreen(name: String) {
@@ -86,5 +124,14 @@ class RegisterActivity : AppCompatActivity(), FragmentAttachListener {
                 commit()
             }
         }
+    }
+
+    private fun openImageCropper(uri: Uri){
+        val fragment = CropperImageFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(KEY_URI, uri)
+            }
+        }
+        replaceFragment(fragment)
     }
 }
