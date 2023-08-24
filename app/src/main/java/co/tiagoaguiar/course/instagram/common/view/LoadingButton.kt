@@ -1,4 +1,4 @@
-package co.tiagoaguiar.course.instagram.login.view
+package co.tiagoaguiar.course.instagram.common.view
 
 import android.content.Context
 import android.util.AttributeSet
