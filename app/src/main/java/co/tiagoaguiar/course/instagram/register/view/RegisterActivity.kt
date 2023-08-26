@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import co.tiagoaguiar.course.instagram.R
-import co.tiagoaguiar.course.instagram.common.extension.hideKeyboard
+import co.tiagoaguiar.course.instagram.common.extension.changeFragment
 import co.tiagoaguiar.course.instagram.common.view.CropperImageFragment
 import co.tiagoaguiar.course.instagram.common.view.CropperImageFragment.Companion.KEY_URI
 import co.tiagoaguiar.course.instagram.databinding.ActivityRegisterBinding
@@ -22,7 +22,6 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.jvm.Throws
 
 class RegisterActivity : AppCompatActivity(), FragmentAttachListener {
 
@@ -113,19 +112,7 @@ class RegisterActivity : AppCompatActivity(), FragmentAttachListener {
     }
 
     private fun replaceFragment(fragment: Fragment) {
-        if (supportFragmentManager.findFragmentById(R.id.register_fragment) == null) {
-            supportFragmentManager.beginTransaction().apply {
-                add(R.id.register_fragment, fragment)
-                commit()
-            }
-        } else {
-            supportFragmentManager.beginTransaction().apply {
-                replace(R.id.register_fragment, fragment)
-                addToBackStack(null)
-                commit()
-            }
-        }
-        hideKeyboard()
+        changeFragment(R.id.register_fragment, fragment)
     }
 
     private fun openImageCropper(uri: Uri){

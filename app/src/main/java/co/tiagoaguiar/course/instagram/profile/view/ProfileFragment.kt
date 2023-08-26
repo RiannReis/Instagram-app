@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.tiagoaguiar.course.instagram.R
 
-class FragmentProfile : Fragment(){
+class ProfileFragment : Fragment(){
 
     override fun onCreateView(
         inflater: LayoutInflater,

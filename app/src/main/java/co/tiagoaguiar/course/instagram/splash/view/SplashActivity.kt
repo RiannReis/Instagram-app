@@ -19,7 +19,6 @@ class SplashActivity : AppCompatActivity(), Splash.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
 
