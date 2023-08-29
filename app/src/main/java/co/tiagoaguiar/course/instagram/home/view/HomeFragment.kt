@@ -22,7 +22,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, Home.Presenter>(
     }
 
     override fun setupPresenter() {
-        TODO("Not yet implemented")
+       // TODO("Not yet implemented")
     }
 
 //    override fun getMenu(): Int? {
