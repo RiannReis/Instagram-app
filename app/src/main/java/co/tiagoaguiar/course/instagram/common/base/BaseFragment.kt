@@ -9,9 +9,9 @@ import androidx.annotation.MenuRes
 import androidx.fragment.app.Fragment
 
 abstract class BaseFragment<T, P : BasePresenter>(
-    @LayoutRes layoutId: Int,
+    @LayoutRes  layoutId: Int,
     val bind: (View) -> T
-        ) : Fragment(layoutId) {
+) : Fragment(layoutId) {
 
     protected var binding: T? = null
 
@@ -19,17 +19,10 @@ abstract class BaseFragment<T, P : BasePresenter>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getMenu()?.let { setHasOptionsMenu(true) }
+        if (getMenu() != null) {
+            setHasOptionsMenu(true)
+        }
         setupPresenter()
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding = bind(view)
-
-        setupViews()
     }
 
     override fun onDestroy() {
@@ -39,15 +32,29 @@ abstract class BaseFragment<T, P : BasePresenter>(
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        getMenu()?.let { inflater.inflate(it, menu) }
+        getMenu()?.let {
+            inflater.inflate(it, menu)
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    @MenuRes
-    open fun getMenu(): Int? = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding = bind(view)
+
+        if (savedInstanceState == null) {
+            setupViews()
+        }
+    }
 
     abstract fun setupViews()
 
     abstract fun setupPresenter()
+
+    @MenuRes
+    open fun getMenu(): Int? {
+        return null
+    }
 
 }
