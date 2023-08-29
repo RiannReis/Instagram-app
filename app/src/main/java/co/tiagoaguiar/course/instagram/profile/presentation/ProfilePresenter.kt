@@ -12,46 +12,104 @@ class ProfilePresenter(
     private val repository: ProfileRepository
 ) : Profile.Presenter {
 
-    override var state: UserAuth? = null
+    var user: UserAuth? = null
+    var post: List<Post>? = null
 
-    override fun fetchUserProfile() {
-        view?.showProgress(true)
-        val userUUID = Database.sessionAuth?.userId ?: throw RuntimeException("user not found")
-        repository.fetchUserProfile(userUUID, object : RequestCallback<UserAuth> {
-            override fun onSuccess(data: UserAuth) {
-                state = data
-                view?.displayUserProfile(data)
+    override fun subscribe(state: Profile.State?) {
+        post = state?.fetchUserPosts()
+
+        if (post != null) {
+            if (post!!.isEmpty()) {
+                view?.displayEmptyPosts()
+            } else {
+                view?.displayFullPosts(post!!)
             }
-
-            override fun onFailure(message: String) {
-                view?.displayRequestFailure(message)
-            }
-
-            override fun onComplete() {
-            }
-        })
-    }
-
-    override fun fetchUserPosts() {
-        val userUUID = Database.sessionAuth?.userId ?: throw RuntimeException("user not found")
-        repository.fetchUserPosts(userUUID, object : RequestCallback<List<Post>> {
-            override fun onSuccess(data: List<Post>) {
-                if (data.isEmpty()) {
-                    view?.displayEmptyPosts()
-                } else {
-                    view?.displayFullPosts(data)
+        } else {
+            val userUUID = Database.sessionAuth?.userId ?: throw RuntimeException("user not found")
+            repository.fetchUserPosts(userUUID, object : RequestCallback<List<Post>> {
+                override fun onSuccess(data: List<Post>) {
+                    post = data
+                    if (data.isEmpty()) {
+                        view?.displayEmptyPosts()
+                    } else {
+                        view?.displayFullPosts(data)
+                    }
                 }
-            }
 
-            override fun onFailure(message: String) {
-                view?.displayRequestFailure(message)
-            }
+                override fun onFailure(message: String) {
+                    view?.displayRequestFailure(message)
+                }
 
-            override fun onComplete() {
-                view?.showProgress(false)
-            }
-        })
+                override fun onComplete() {
+                    view?.showProgress(false)
+                }
+            })
+        }
+
+        user = state?.fetchUserProfile()
+        if (user != null) {
+            view?.displayUserProfile(user!!)
+        } else {
+            view?.showProgress(true)
+            val userUUID = Database.sessionAuth?.userId ?: throw RuntimeException("user not found")
+            repository.fetchUserProfile(userUUID, object : RequestCallback<UserAuth> {
+                override fun onSuccess(data: UserAuth) {
+                    user = data
+                    view?.displayUserProfile(data)
+                }
+
+                override fun onFailure(message: String) {
+                    view?.displayRequestFailure(message)
+                }
+
+                override fun onComplete() {
+                }
+            })
+        }
     }
+
+    override fun getState(): Profile.State {
+        return ProfileState(user, post)
+    }
+
+//    override fun fetchUserProfile() {
+//        view?.showProgress(true)
+//        val userUUID = Database.sessionAuth?.userId ?: throw RuntimeException("user not found")
+//        repository.fetchUserProfile(userUUID, object : RequestCallback<UserAuth> {
+//            override fun onSuccess(data: UserAuth) {
+//                state = data
+//                view?.displayUserProfile(data)
+//            }
+//
+//            override fun onFailure(message: String) {
+//                view?.displayRequestFailure(message)
+//            }
+//
+//            override fun onComplete() {
+//            }
+//        })
+//    }
+//
+//    override fun fetchUserPosts() {
+//        val userUUID = Database.sessionAuth?.userId ?: throw RuntimeException("user not found")
+//        repository.fetchUserPosts(userUUID, object : RequestCallback<List<Post>> {
+//            override fun onSuccess(data: List<Post>) {
+//                if (data.isEmpty()) {
+//                    view?.displayEmptyPosts()
+//                } else {
+//                    view?.displayFullPosts(data)
+//                }
+//            }
+//
+//            override fun onFailure(message: String) {
+//                view?.displayRequestFailure(message)
+//            }
+//
+//            override fun onComplete() {
+//                view?.showProgress(false)
+//            }
+//        })
+//    }
 
     override fun onDestroy() {
         view = null
