@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import co.tiagoaguiar.course.instagram.R
 import co.tiagoaguiar.course.instagram.common.base.BaseFragment
 import co.tiagoaguiar.course.instagram.databinding.FragmentHomeBinding
-import co.tiagoaguiar.course.instagram.profile.Profile
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, Home.Presenter>(
     R.layout.fragment_home,

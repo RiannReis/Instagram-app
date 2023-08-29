@@ -5,10 +5,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import co.tiagoaguiar.course.instagram.R
 import co.tiagoaguiar.course.instagram.common.base.BaseFragment
+import co.tiagoaguiar.course.instagram.common.base.DependencyInjector
 import co.tiagoaguiar.course.instagram.common.model.Post
 import co.tiagoaguiar.course.instagram.common.model.UserAuth
 import co.tiagoaguiar.course.instagram.databinding.FragmentProfileBinding
 import co.tiagoaguiar.course.instagram.profile.Profile
+import co.tiagoaguiar.course.instagram.profile.presentation.ProfilePresenter
 
 class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
         R.layout.fragment_profile,
@@ -27,7 +29,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     }
 
     override fun setupPresenter() {
-        //TODO: presenter = ProfilePresenter(this, repository)
+        val repository = DependencyInjector.profileRepository()
+        presenter = ProfilePresenter(this, repository)
     }
 
     override fun getMenu(): Int? {

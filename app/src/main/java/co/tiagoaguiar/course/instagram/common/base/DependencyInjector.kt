@@ -2,6 +2,8 @@ package co.tiagoaguiar.course.instagram.common.base
 
 import co.tiagoaguiar.course.instagram.login.data.FakeDataSource
 import co.tiagoaguiar.course.instagram.login.data.LoginRepository
+import co.tiagoaguiar.course.instagram.profile.model.FakeProfileRemoteDataSource
+import co.tiagoaguiar.course.instagram.profile.model.ProfileRepository
 import co.tiagoaguiar.course.instagram.register.data.FakeRegisterDataSource
 import co.tiagoaguiar.course.instagram.register.data.RegisterRepository
 import co.tiagoaguiar.course.instagram.splash.data.FakeLocalDataSource
@@ -18,5 +20,9 @@ object DependencyInjector {
 
     fun splashRepository(): SplashRepository {
         return SplashRepository(FakeLocalDataSource())
+    }
+
+    fun profileRepository(): ProfileRepository {
+        return ProfileRepository(FakeProfileRemoteDataSource())
     }
 }
