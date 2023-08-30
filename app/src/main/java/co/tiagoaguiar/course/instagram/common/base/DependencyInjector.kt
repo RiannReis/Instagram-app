@@ -2,7 +2,9 @@ package co.tiagoaguiar.course.instagram.common.base
 
 import co.tiagoaguiar.course.instagram.login.data.FakeDataSource
 import co.tiagoaguiar.course.instagram.login.data.LoginRepository
-import co.tiagoaguiar.course.instagram.profile.model.FakeProfileRemoteDataSource
+import co.tiagoaguiar.course.instagram.profile.model.PostListMemoryCache
+import co.tiagoaguiar.course.instagram.profile.model.ProfileDataSourceFactory
+import co.tiagoaguiar.course.instagram.profile.model.ProfileMemoryCache
 import co.tiagoaguiar.course.instagram.profile.model.ProfileRepository
 import co.tiagoaguiar.course.instagram.register.data.FakeRegisterDataSource
 import co.tiagoaguiar.course.instagram.register.data.RegisterRepository
@@ -23,6 +25,6 @@ object DependencyInjector {
     }
 
     fun profileRepository(): ProfileRepository {
-        return ProfileRepository(FakeProfileRemoteDataSource())
+        return ProfileRepository(ProfileDataSourceFactory(ProfileMemoryCache, PostListMemoryCache))
     }
 }
