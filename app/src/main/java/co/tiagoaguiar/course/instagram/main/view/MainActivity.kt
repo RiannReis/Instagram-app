@@ -9,7 +9,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import co.tiagoaguiar.course.instagram.R
-import co.tiagoaguiar.course.instagram.camera.view.CameraFragment
+import co.tiagoaguiar.course.instagram.add.view.AddFragment
 import co.tiagoaguiar.course.instagram.common.extension.changeFragment
 import co.tiagoaguiar.course.instagram.databinding.ActivityMainBinding
 import co.tiagoaguiar.course.instagram.home.view.HomeFragment
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     private lateinit var homeFragment: Fragment
     private lateinit var searchFragment: Fragment
-    private lateinit var cameraFragment: Fragment
+    private lateinit var addFragment: Fragment
     private lateinit var profileFragment: Fragment
 
     private var currentFragment: Fragment? = null
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         homeFragment = HomeFragment()
         searchFragment = SearchFragment()
-        cameraFragment = CameraFragment()
+        addFragment = AddFragment()
         profileFragment = ProfileFragment()
 
         binding.mainBottomNav.setOnNavigationItemSelectedListener(this)
@@ -74,8 +74,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 currentFragment = searchFragment
             }
             R.id.menu_bottom_add -> {
-                if (currentFragment == cameraFragment) return false
-                currentFragment = cameraFragment
+                if (currentFragment == addFragment) return false
+                currentFragment = addFragment
             }
             R.id.menu_bottom_profile -> {
                 if (currentFragment == profileFragment) return false
