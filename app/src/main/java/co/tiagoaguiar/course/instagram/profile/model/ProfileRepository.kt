@@ -31,7 +31,7 @@ class ProfileRepository(private val dataSourceFactory: ProfileDataSourceFactory)
         val localDataSource = dataSourceFactory.createLocalDataSource()
         val userAuth = localDataSource.fetchSession()
 
-        val dataSource = dataSourceFactory.createFromUser()
+        val dataSource = dataSourceFactory.createFromPost()
         dataSource.fetchUserPosts(userAuth.userId, object : RequestCallback<List<Post>> {
             override fun onSuccess(data: List<Post>) {
                 localDataSource.putPosts(data)

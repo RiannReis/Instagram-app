@@ -1,5 +1,8 @@
 package co.tiagoaguiar.course.instagram.common.base
 
+import co.tiagoaguiar.course.instagram.home.data.HomeDataSourceFactory
+import co.tiagoaguiar.course.instagram.home.data.HomeFeedMemoryCache
+import co.tiagoaguiar.course.instagram.home.data.HomeRepository
 import co.tiagoaguiar.course.instagram.login.data.FakeDataSource
 import co.tiagoaguiar.course.instagram.login.data.LoginRepository
 import co.tiagoaguiar.course.instagram.profile.model.PostListMemoryCache
@@ -26,5 +29,9 @@ object DependencyInjector {
 
     fun profileRepository(): ProfileRepository {
         return ProfileRepository(ProfileDataSourceFactory(ProfileMemoryCache, PostListMemoryCache))
+    }
+
+    fun homeRepository(): HomeRepository {
+        return HomeRepository(HomeDataSourceFactory(HomeFeedMemoryCache))
     }
 }

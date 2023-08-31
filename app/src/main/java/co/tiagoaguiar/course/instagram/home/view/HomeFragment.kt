@@ -1,62 +1,58 @@
 package co.tiagoaguiar.course.instagram.home.view
 
-import android.os.Bundle
-import android.view.*
-import android.widget.ImageView
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
+import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import co.tiagoaguiar.course.instagram.R
+import co.tiagoaguiar.course.instagram.common.base.BaseFragment
+import co.tiagoaguiar.course.instagram.common.base.DependencyInjector
+import co.tiagoaguiar.course.instagram.common.model.Post
+import co.tiagoaguiar.course.instagram.databinding.FragmentHomeBinding
+import co.tiagoaguiar.course.instagram.home.Home
+import co.tiagoaguiar.course.instagram.home.presentation.HomePresenter
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment<FragmentHomeBinding, Home.Presenter>(
+    R.layout.fragment_home,
+    FragmentHomeBinding::bind
+), Home.View {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    override lateinit var presenter: Home.Presenter
+
+    private val adapter = FeedAdapter()
+
+    override fun setupViews() {
+        binding?.homeRv?.layoutManager = LinearLayoutManager(requireContext())
+        binding?.homeRv?.adapter = adapter
+
+        presenter.fetchFeed()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val rv = view.findViewById<RecyclerView>(R.id.home_rv)
-        rv.layoutManager = LinearLayoutManager(requireContext())
-        rv.adapter = PostAdapter()
+    override fun setupPresenter() {
+        val repository = DependencyInjector.homeRepository()
+        presenter = HomePresenter(this, repository)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+    override fun getMenu(): Int {
+        return R.menu.menu_profile
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_profile, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    override fun showProgress(enabled: Boolean) {
+        binding?.homeProgress?.visibility = if (enabled) View.VISIBLE else View.GONE
     }
 
-    private class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-            return PostViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.item_post_list, parent, false)
-            )
-        }
-
-        override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-            holder.bind(R.drawable.ic_insta_add)
-        }
-
-        override fun getItemCount(): Int {
-            return 30
-        }
-
-
-        private class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            fun bind(image: Int) {
-                itemView.findViewById<ImageView>(R.id.home_img_post).setImageResource(image)
-            }
-        }
-
-
+    override fun displayRequestFailure(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
+    override fun displayEmptyPosts() {
+        binding?.homeTxtEmpty?.visibility = View.VISIBLE
+        binding?.homeRv?.visibility = View.GONE
+    }
+
+    override fun displayFullPosts(posts: List<Post>) {
+        binding?.homeTxtEmpty?.visibility = View.GONE
+        binding?.homeRv?.visibility = View.VISIBLE
+        adapter.items = posts
+        adapter.notifyDataSetChanged()
+    }
 }

@@ -7,6 +7,7 @@ object Database {
     val usersAuth = hashSetOf<UserAuth>()
     val photos = hashSetOf<Photo>()
     val posts = hashMapOf<String, Set<Post>>()
+    val feed = hashMapOf<String, Set<Post>>()
 
     var sessionAuth: UserAuth? = null
 
