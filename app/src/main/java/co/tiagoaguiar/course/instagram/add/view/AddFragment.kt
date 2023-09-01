@@ -43,7 +43,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, Add.Presenter>(
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
-                    
+
                 }
             })
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
