@@ -14,7 +14,9 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import co.tiagoaguiar.course.instagram.R
 import co.tiagoaguiar.course.instagram.common.util.Files
@@ -93,8 +95,7 @@ class CameraFragment : Fragment() {
             outputOptions, ContextCompat.getMainExecutor(requireContext()), object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-                    Log.d("teste", savedUri.toString())
-                    //TODO: delegar a Uri para o presenter
+                    setFragmentResult("takePhotoKey", bundleOf("uri" to savedUri))
                 }
 
                 override fun onError(exception: ImageCaptureException) {

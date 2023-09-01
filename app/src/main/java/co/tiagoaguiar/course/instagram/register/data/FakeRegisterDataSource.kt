@@ -36,6 +36,11 @@ class FakeRegisterDataSource : RegisterDataSource {
                 val created = Database.usersAuth.add(newUser)
                 if (created) {
                     Database.sessionAuth = newUser
+
+                    Database.followers[newUser.userId] = hashSetOf()
+                    Database.posts[newUser.userId] = hashSetOf()
+                    Database.feed[newUser.userId] = hashSetOf()
+
                     callback.onSuccess()
                 } else {
                     callback.onFailure("Erro interno")

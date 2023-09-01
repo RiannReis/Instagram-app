@@ -50,4 +50,5 @@
     <string name="invalid_name">Nome deve ter ao menos 3 caracteres</string>
     <string name="empty_list">Nenhum registro encontrado</string>
     <string name="permission_camera_denied">Permissão não concedida. Habilite nas configurações do seu smartphone.</string>
+    <string name="hint_post_photo">Escreva alguma coisa ...</string>
 </resources>
