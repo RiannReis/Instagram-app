@@ -1,6 +1,8 @@
 package co.tiagoaguiar.course.instagram.add.view
 
 import android.Manifest
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -26,6 +28,7 @@ class AddFragment : Fragment(R.layout.fragment_add) {
     }
 
     private var binding: FragmentAddBinding? = null
+    private var addListener: AddListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +38,16 @@ class AddFragment : Fragment(R.layout.fragment_add) {
             uri?.let {
                 val intent = Intent(requireContext(), AddActivity::class.java)
                 intent.putExtra("photoUri", uri)
-                startActivity(intent)
+                addActivityResult.launch(intent)
             }
         }
+    }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is AddListener) {
+            addListener = context
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,4 +117,14 @@ class AddFragment : Fragment(R.layout.fragment_add) {
                 ).show()
             }
         }
+
+    private val addActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            addListener?.onPostCreated()
+        }
+    }
+
+    interface AddListener {
+        fun onPostCreated()
+    }
 }

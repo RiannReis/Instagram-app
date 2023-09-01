@@ -23,7 +23,7 @@ class HomeLocalDataSource(private val feedCache: Cache<List<Post>>) : HomeDataSo
     }
 
 
-    override fun putFeed(response: List<Post>) {
+    override fun putFeed(response: List<Post>?) {
         feedCache.put(response)
     }
 }

@@ -47,4 +47,9 @@ class ProfileRepository(private val dataSourceFactory: ProfileDataSourceFactory)
             }
         })
     }
+
+    fun clearCache() {
+        val localDataSource = dataSourceFactory.createLocalDataSource()
+        localDataSource.putPosts(null)
+    }
 }

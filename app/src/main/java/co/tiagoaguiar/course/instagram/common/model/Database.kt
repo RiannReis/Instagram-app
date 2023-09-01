@@ -1,5 +1,7 @@
 package co.tiagoaguiar.course.instagram.common.model
 
+import android.net.Uri
+import java.io.File
 import java.util.*
 
 object Database {
@@ -26,6 +28,30 @@ object Database {
         followers[userB.userId] = hashSetOf()
         posts[userB.userId] = hashSetOf()
         feed[userB.userId] = hashSetOf()
+
+        feed[userA.userId]?.addAll(
+            arrayListOf(
+                Post(UUID.randomUUID().toString(),
+                    Uri.fromFile(File("storage/emulated/0/Android/media/co.tiagoaguiar.course.instagram/Instagram/2023-09-01-18-23-18-534.jpg")),
+                "description", System.currentTimeMillis(), userA),
+
+                Post(UUID.randomUUID().toString(),
+                    Uri.fromFile(File("storage/emulated/0/Android/media/co.tiagoaguiar.course.instagram/Instagram/2023-09-01-18-23-18-534.jpg")),
+                    "description", System.currentTimeMillis(), userA),
+
+                Post(UUID.randomUUID().toString(),
+                    Uri.fromFile(File("storage/emulated/0/Android/media/co.tiagoaguiar.course.instagram/Instagram/2023-09-01-18-23-18-534.jpg")),
+                    "description", System.currentTimeMillis(), userA),
+
+                Post(UUID.randomUUID().toString(),
+                    Uri.fromFile(File("storage/emulated/0/Android/media/co.tiagoaguiar.course.instagram/Instagram/2023-09-01-18-23-18-534.jpg")),
+                    "description", System.currentTimeMillis(), userA)
+            )
+        )
+
+        feed[userA.userId]?.toList()?.let {
+            feed[userB.userId]?.addAll(it)
+        }
 
         sessionAuth = usersAuth.first()
     }

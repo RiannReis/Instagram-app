@@ -8,6 +8,7 @@ interface Home {
 
     interface Presenter : BasePresenter {
         fun fetchFeed()
+        fun clear()
 
     }
 

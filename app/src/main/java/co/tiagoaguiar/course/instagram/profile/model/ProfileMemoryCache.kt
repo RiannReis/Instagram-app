@@ -1,8 +1,9 @@
 package co.tiagoaguiar.course.instagram.profile.model
 
+import co.tiagoaguiar.course.instagram.common.base.Cache
 import co.tiagoaguiar.course.instagram.common.model.UserAuth
 
-object ProfileMemoryCache : ProfileCache<UserAuth>{
+object ProfileMemoryCache : Cache<UserAuth> {
 
     private var userAuth: UserAuth? = null
 
@@ -17,7 +18,7 @@ object ProfileMemoryCache : ProfileCache<UserAuth>{
         return null
     }
 
-    override fun put(data: UserAuth) {
+    override fun put(data: UserAuth?) {
         userAuth = data
     }
 
