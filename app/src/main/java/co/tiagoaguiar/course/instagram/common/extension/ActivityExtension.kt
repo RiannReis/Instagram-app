@@ -10,8 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import co.tiagoaguiar.course.instagram.R
 
-fun Activity.hideKeyboard(){
-    val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+fun Activity.hideKeyboard() {
+    val imm: InputMethodManager =
+        getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
 
     var view: View? = currentFocus
 
@@ -30,16 +31,16 @@ fun Activity.animationEnd(callback: () -> Unit): AnimatorListenerAdapter {
     }
 }
 
-fun AppCompatActivity.changeFragment(@IdRes id: Int, fragment: Fragment){
+fun AppCompatActivity.changeFragment(@IdRes id: Int, fragment: Fragment) {
 
     if (supportFragmentManager.findFragmentById(R.id.main_activity) == null) {
         supportFragmentManager.beginTransaction().apply {
-            add(id, fragment)
+            add(id, fragment, fragment.javaClass.simpleName)
             commit()
         }
     } else {
         supportFragmentManager.beginTransaction().apply {
-            replace(id, fragment)
+            replace(id, fragment, fragment.javaClass.simpleName)
             addToBackStack(null)
             commit()
         }

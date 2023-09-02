@@ -4,7 +4,6 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import co.tiagoaguiar.course.instagram.common.model.Database
-import co.tiagoaguiar.course.instagram.common.model.Photo
 import co.tiagoaguiar.course.instagram.common.model.UserAuth
 import java.util.*
 
@@ -32,7 +31,7 @@ class FakeRegisterDataSource : RegisterDataSource {
             if (userAuth != null) {
                 callback.onFailure("Usuário já cadastrado")
             } else {
-                val newUser = UserAuth(UUID.randomUUID().toString(), name, email, password)
+                val newUser = UserAuth(UUID.randomUUID().toString(), name, email, password, null)
                 val created = Database.usersAuth.add(newUser)
                 if (created) {
                     Database.sessionAuth = newUser
@@ -59,13 +58,11 @@ class FakeRegisterDataSource : RegisterDataSource {
             if (userAuth == null) {
                 callback.onFailure("Usuário não encontrado")
             } else {
-                val newPhoto = Photo(userAuth.userId, photoUri)
-                val created = Database.photos.add(newPhoto)
-                if (created) {
-                    callback.onSuccess()
-                } else {
-                    callback.onFailure("Erro interno")
-                }
+                val index = Database.usersAuth.indexOf(Database.sessionAuth)
+                Database.usersAuth[index] = Database.sessionAuth!!.copy(photoUri = photoUri)
+                Database.sessionAuth = Database.usersAuth[index]
+
+                callback.onSuccess()
             }
             callback.onComplete()
 
