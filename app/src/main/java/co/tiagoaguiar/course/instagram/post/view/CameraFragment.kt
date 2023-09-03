@@ -1,4 +1,4 @@
-package co.tiagoaguiar.course.instagram.add.view
+package co.tiagoaguiar.course.instagram.post.view
 
 import android.net.Uri
 import android.os.Bundle

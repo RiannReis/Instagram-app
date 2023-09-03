@@ -9,7 +9,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import co.tiagoaguiar.course.instagram.R
-import co.tiagoaguiar.course.instagram.add.view.AddFragment
+import co.tiagoaguiar.course.instagram.post.view.AddFragment
 import co.tiagoaguiar.course.instagram.common.extension.changeFragment
 import co.tiagoaguiar.course.instagram.databinding.ActivityMainBinding
 import co.tiagoaguiar.course.instagram.home.view.HomeFragment
