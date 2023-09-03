@@ -7,7 +7,7 @@ import co.tiagoaguiar.course.instagram.common.model.Database
 import co.tiagoaguiar.course.instagram.common.model.Post
 import co.tiagoaguiar.course.instagram.common.model.UserAuth
 
-class FakeProfileRemoteDataSource : ProfileDataSource {
+class ProfileFakeRemoteDataSource : ProfileDataSource {
     override fun fetchUserProfile(userUUID: String, callback: RequestCallback<UserAuth>) {
         Handler(Looper.getMainLooper()).postDelayed({
 

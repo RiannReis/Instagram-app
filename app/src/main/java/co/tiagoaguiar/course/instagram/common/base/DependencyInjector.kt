@@ -15,8 +15,10 @@ import co.tiagoaguiar.course.instagram.profile.model.PostListMemoryCache
 import co.tiagoaguiar.course.instagram.profile.model.ProfileDataSourceFactory
 import co.tiagoaguiar.course.instagram.profile.model.ProfileMemoryCache
 import co.tiagoaguiar.course.instagram.profile.model.ProfileRepository
-import co.tiagoaguiar.course.instagram.register.data.FakeRegisterDataSource
+import co.tiagoaguiar.course.instagram.register.data.RegisterFakeDataSource
 import co.tiagoaguiar.course.instagram.register.data.RegisterRepository
+import co.tiagoaguiar.course.instagram.search.data.SearchFakeRemoteDataSource
+import co.tiagoaguiar.course.instagram.search.data.SearchRepository
 import co.tiagoaguiar.course.instagram.splash.data.FakeLocalDataSource
 import co.tiagoaguiar.course.instagram.splash.data.SplashRepository
 
@@ -26,11 +28,15 @@ object DependencyInjector {
     }
 
     fun registerEmailRepository(): RegisterRepository{
-        return RegisterRepository(FakeRegisterDataSource())
+        return RegisterRepository(RegisterFakeDataSource())
     }
 
     fun splashRepository(): SplashRepository {
         return SplashRepository(FakeLocalDataSource())
+    }
+
+    fun searchRepository(): SearchRepository {
+        return SearchRepository(SearchFakeRemoteDataSource())
     }
 
     fun profileRepository(): ProfileRepository {

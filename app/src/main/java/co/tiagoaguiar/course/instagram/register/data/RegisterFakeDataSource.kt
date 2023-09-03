@@ -7,7 +7,7 @@ import co.tiagoaguiar.course.instagram.common.model.Database
 import co.tiagoaguiar.course.instagram.common.model.UserAuth
 import java.util.*
 
-class FakeRegisterDataSource : RegisterDataSource {
+class RegisterFakeDataSource : RegisterDataSource {
     override fun create(email: String, callback: RegisterCallback) {
         Handler(Looper.getMainLooper()).postDelayed({
 

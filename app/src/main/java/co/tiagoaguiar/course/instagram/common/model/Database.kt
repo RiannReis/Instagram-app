@@ -40,36 +40,9 @@ object Database {
         posts[userB.userId] = hashSetOf()
         feed[userB.userId] = hashSetOf()
 
-        feed[userA.userId]?.addAll(
-            arrayListOf(
-                Post(
-                    UUID.randomUUID().toString(),
-                    Uri.fromFile(File("storage/emulated/0/Android/media/co.tiagoaguiar.course.instagram/Instagram/2023-09-01-18-23-18-534.jpg")),
-                    "description", System.currentTimeMillis(), userA
-                ),
-
-                Post(
-                    UUID.randomUUID().toString(),
-                    Uri.fromFile(File("storage/emulated/0/Android/media/co.tiagoaguiar.course.instagram/Instagram/2023-09-01-18-23-18-534.jpg")),
-                    "description", System.currentTimeMillis(), userA
-                ),
-
-                Post(
-                    UUID.randomUUID().toString(),
-                    Uri.fromFile(File("storage/emulated/0/Android/media/co.tiagoaguiar.course.instagram/Instagram/2023-09-01-18-23-18-534.jpg")),
-                    "description", System.currentTimeMillis(), userA
-                ),
-
-                Post(
-                    UUID.randomUUID().toString(),
-                    Uri.fromFile(File("storage/emulated/0/Android/media/co.tiagoaguiar.course.instagram/Instagram/2023-09-01-18-23-18-534.jpg")),
-                    "description", System.currentTimeMillis(), userA
-                )
-            )
-        )
-
-        feed[userA.userId]?.toList()?.let {
-            feed[userB.userId]?.addAll(it)
+        for (i in 0..30) {
+            val user = UserAuth(UUID.randomUUID().toString(), "User$i", "user$i@gmail.com", "123123123", null)
+            usersAuth.add(user)
         }
 
         sessionAuth = usersAuth.first()

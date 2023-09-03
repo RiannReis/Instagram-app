@@ -7,7 +7,7 @@ import co.tiagoaguiar.course.instagram.common.model.Database
 import co.tiagoaguiar.course.instagram.common.model.Post
 import co.tiagoaguiar.course.instagram.common.model.UserAuth
 
-class FakeHomeRemoteDataSource : HomeDataSource {
+class HomeFakeRemoteDataSource : HomeDataSource {
     override fun fetchFeed(userUUID: String, callback: RequestCallback<List<Post>>) {
         Handler(Looper.getMainLooper()).postDelayed({
 

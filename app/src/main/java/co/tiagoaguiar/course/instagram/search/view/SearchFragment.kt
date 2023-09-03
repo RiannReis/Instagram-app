@@ -2,30 +2,36 @@ package co.tiagoaguiar.course.instagram.search.view
 
 import android.app.SearchManager
 import android.content.Context
-import android.view.*
-import android.widget.ImageView
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import co.tiagoaguiar.course.instagram.R
 import co.tiagoaguiar.course.instagram.common.base.BaseFragment
+import co.tiagoaguiar.course.instagram.common.base.DependencyInjector
+import co.tiagoaguiar.course.instagram.common.model.UserAuth
 import co.tiagoaguiar.course.instagram.databinding.FragmentSearchBinding
 import co.tiagoaguiar.course.instagram.search.Search
+import co.tiagoaguiar.course.instagram.search.presentation.SearchPresenter
 
 class SearchFragment : BaseFragment<FragmentSearchBinding, Search.Presenter>(
     R.layout.fragment_search,
     FragmentSearchBinding::bind
-){
+), Search.View {
 
     override lateinit var presenter: Search.Presenter
 
+    private val adapter = SearchAdapter()
+
     override fun setupViews() {
         binding?.searchRv?.layoutManager = LinearLayoutManager(requireContext())
-        binding?.searchRv?.adapter = PostAdapter()
+        binding?.searchRv?.adapter = adapter
     }
 
     override fun setupPresenter() {
-        //TODO("Not yet implemented")
+        val repository = DependencyInjector.searchRepository()
+        presenter = SearchPresenter(this, repository)
     }
 
     override fun getMenu(): Int? {
@@ -35,7 +41,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, Search.Presenter>(
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchManager =
+            requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = (menu.findItem(R.id.menu_search).actionView as SearchView)
         searchView.apply {
             setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
@@ -45,33 +52,30 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, Search.Presenter>(
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText?.isNotEmpty() == true) {
+                        presenter.fetchUsers(newText)
+                        return true
+                    }
                     return false
                 }
             })
         }
+    }
+
+    override fun showProgress(enabled: Boolean) {
+        binding?.searchProgress?.visibility = if (enabled) View.VISIBLE else View.GONE
 
     }
 
-    private class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>(){
+    override fun displayFullUsers(users: List<UserAuth>) {
+        binding?.searchTxtEmpty?.visibility = View.GONE
+        binding?.searchRv?.visibility = View.VISIBLE
+        adapter.items = users
+        adapter.notifyDataSetChanged()
+    }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-            return PostViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.item_user_list, parent, false)
-            )
-        }
-
-        override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-            holder.bind(R.drawable.ic_insta_add)
-        }
-
-        override fun getItemCount(): Int {
-            return 30
-        }
-
-        private class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-            fun bind(image: Int){
-                itemView.findViewById<ImageView>(R.id.search_img_user).setImageResource(image)
-            }
-        }
+    override fun displayEmptyUsers() {
+        binding?.searchTxtEmpty?.visibility = View.VISIBLE
+        binding?.searchRv?.visibility = View.GONE
     }
 }
