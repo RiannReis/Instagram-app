@@ -14,8 +14,8 @@ class ProfilePresenter(
 
     override fun fetchUserProfile(userId: String?) {
         view?.showProgress(true)
-        repository.fetchUserProfile(userId, object : RequestCallback<UserAuth> {
-            override fun onSuccess(data: UserAuth) {
+        repository.fetchUserProfile(userId, object : RequestCallback<Pair<UserAuth, Boolean?>> {
+            override fun onSuccess(data: Pair<UserAuth, Boolean?>) {
                 view?.displayUserProfile(data)
             }
 

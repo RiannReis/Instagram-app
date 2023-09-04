@@ -52,13 +52,21 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
         binding?.profileProgress?.visibility = if (enabled) View.VISIBLE else View.GONE
     }
 
-    override fun displayUserProfile(userAuth: UserAuth) {
+    override fun displayUserProfile(user: Pair<UserAuth, Boolean?>) {
+        val (userAuth, following) = user
+
         binding?.profileTxtPostsCount?.text = userAuth.postCount.toString()
         binding?.profileTxtFollowingCount?.text = userAuth.followingCount.toString()
         binding?.profileTxtFollowersCount?.text = userAuth.followersCount.toString()
         binding?.profileTxtUsername?.text = userAuth.name
         binding?.profileTxtBio?.text = "TODO"
         binding?.profileImgIcon?.setImageURI(userAuth.photoUri)
+
+        binding?.profileBtnEditProfile?.text = when(following) {
+            null -> getString(R.string.edit_profile)
+            true -> getString(R.string.unfollow)
+            false -> getString(R.string.follow)
+        }
 
         presenter.fetchUserPosts(userId)
     }
