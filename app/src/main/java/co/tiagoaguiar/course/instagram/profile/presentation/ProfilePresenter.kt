@@ -12,9 +12,9 @@ class ProfilePresenter(
 ) : Profile.Presenter {
 
 
-    override fun fetchUserProfile() {
+    override fun fetchUserProfile(userId: String?) {
         view?.showProgress(true)
-        repository.fetchUserProfile(object : RequestCallback<UserAuth> {
+        repository.fetchUserProfile(userId, object : RequestCallback<UserAuth> {
             override fun onSuccess(data: UserAuth) {
                 view?.displayUserProfile(data)
             }
@@ -27,8 +27,8 @@ class ProfilePresenter(
         })
     }
 
-    override fun fetchUserPosts() {
-        repository.fetchUserPosts(object : RequestCallback<List<Post>> {
+    override fun fetchUserPosts(userId: String?) {
+        repository.fetchUserPosts(userId, object : RequestCallback<List<Post>> {
             override fun onSuccess(data: List<Post>) {
                 if (data.isEmpty()) {
                     view?.displayEmptyPosts()

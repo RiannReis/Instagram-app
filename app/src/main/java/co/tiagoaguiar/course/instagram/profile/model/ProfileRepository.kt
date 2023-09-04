@@ -6,14 +6,16 @@ import co.tiagoaguiar.course.instagram.common.model.UserAuth
 
 class ProfileRepository(private val dataSourceFactory: ProfileDataSourceFactory) {
 
-    fun fetchUserProfile(callback: RequestCallback<UserAuth>) {
+    fun fetchUserProfile(userId: String?, callback: RequestCallback<UserAuth>) {
         val localDataSource = dataSourceFactory.createLocalDataSource()
-        val userAuth = localDataSource.fetchSession()
+        val uId = userId ?: localDataSource.fetchSession().userId
 
-        val dataSource = dataSourceFactory.createFromUser()
-        dataSource.fetchUserProfile(userAuth.userId, object : RequestCallback<UserAuth> {
+        val dataSource = dataSourceFactory.createFromUser(userId)
+        dataSource.fetchUserProfile(uId, object : RequestCallback<UserAuth> {
             override fun onSuccess(data: UserAuth) {
-                localDataSource.putUser(data)
+                if (uId == null) {
+                    localDataSource.putUser(data)
+                }
                 callback.onSuccess(data)
             }
 
@@ -27,14 +29,16 @@ class ProfileRepository(private val dataSourceFactory: ProfileDataSourceFactory)
         })
     }
 
-    fun fetchUserPosts(callback: RequestCallback<List<Post>>) {
+    fun fetchUserPosts(userId: String?, callback: RequestCallback<List<Post>>) {
         val localDataSource = dataSourceFactory.createLocalDataSource()
-        val userAuth = localDataSource.fetchSession()
+        val uId = userId ?: localDataSource.fetchSession().userId
 
-        val dataSource = dataSourceFactory.createFromPost()
-        dataSource.fetchUserPosts(userAuth.userId, object : RequestCallback<List<Post>> {
+        val dataSource = dataSourceFactory.createFromPost(userId)
+        dataSource.fetchUserPosts(uId, object : RequestCallback<List<Post>> {
             override fun onSuccess(data: List<Post>) {
-                localDataSource.putPosts(data)
+                if (uId == null) {
+                    localDataSource.putPosts(data)
+                }
                 callback.onSuccess(data)
             }
 

@@ -20,16 +20,23 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     FragmentProfileBinding::bind
 ), Profile.View, BottomNavigationView.OnNavigationItemSelectedListener {
 
+    companion object {
+        const val KEY_USER_ID = "key_user_id"
+    }
+
     override lateinit var presenter: Profile.Presenter
 
     private val adapter = PostAdapter()
+    private var userId: String? = null
 
     override fun setupViews() {
+        userId = arguments?.getString(KEY_USER_ID)
+
         binding?.profileRv?.layoutManager = GridLayoutManager(requireContext(), 3)
         binding?.profileRv?.adapter = adapter
         binding?.profileNavTab?.setOnNavigationItemSelectedListener(this)
 
-        presenter.fetchUserProfile()
+        presenter.fetchUserProfile(userId)
     }
 
     override fun setupPresenter() {
@@ -53,7 +60,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
         binding?.profileTxtBio?.text = "TODO"
         binding?.profileImgIcon?.setImageURI(userAuth.photoUri)
 
-        presenter.fetchUserPosts()
+        presenter.fetchUserPosts(userId)
     }
 
     override fun displayRequestFailure(message: String) {

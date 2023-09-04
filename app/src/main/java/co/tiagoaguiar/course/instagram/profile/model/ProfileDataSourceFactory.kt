@@ -14,14 +14,22 @@ class ProfileDataSourceFactory(
         return ProfileLocalDataSource(profileCache, postsCache)
     }
 
-    fun createFromUser(): ProfileDataSource {
+    fun createFromUser(userId: String?): ProfileDataSource {
+        if (userId != null) {
+            return ProfileFakeRemoteDataSource()
+        }
+
         if (profileCache.isCached()) {
             return ProfileLocalDataSource(profileCache, postsCache)
         }
         return ProfileFakeRemoteDataSource()
     }
 
-    fun createFromPost(): ProfileDataSource {
+    fun createFromPost(userId: String?): ProfileDataSource {
+        if (userId != null) {
+            return ProfileFakeRemoteDataSource()
+        }
+
         if (postsCache.isCached()) {
             return ProfileLocalDataSource(profileCache, postsCache)
         }

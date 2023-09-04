@@ -7,6 +7,7 @@ import android.view.WindowInsetsController
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import co.tiagoaguiar.course.instagram.R
 import co.tiagoaguiar.course.instagram.post.view.AddFragment
@@ -19,7 +20,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
-    AddFragment.AddListener {
+    AddFragment.AddListener, SearchFragment.SearchListener {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -73,6 +74,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             R.id.menu_bottom_search -> {
                 if (currentFragment == searchFragment) return false
                 currentFragment = searchFragment
+                scrollToolbarEnabled = false
             }
             R.id.menu_bottom_add -> {
                 if (currentFragment == addFragment) return false
@@ -116,5 +118,18 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
 
         binding.mainBottomNav.selectedItemId = R.id.menu_bottom_home
+    }
+
+    override fun goToProfile(userId: String) {
+        val fragment = ProfileFragment().apply {
+            arguments = bundleOf().apply {
+                putString(ProfileFragment.KEY_USER_ID, userId)
+            }
+        }
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.main_activity, fragment, fragment.javaClass.simpleName + "detail")
+            addToBackStack(null)
+            commit()
+        }
     }
 }
