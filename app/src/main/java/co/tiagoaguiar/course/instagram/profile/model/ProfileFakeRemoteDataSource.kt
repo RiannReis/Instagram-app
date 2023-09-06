@@ -8,10 +8,13 @@ import co.tiagoaguiar.course.instagram.common.model.Post
 import co.tiagoaguiar.course.instagram.common.model.UserAuth
 
 class ProfileFakeRemoteDataSource : ProfileDataSource {
-    override fun fetchUserProfile(userUUID: String, callback: RequestCallback<Pair<UserAuth, Boolean?>>) {
+    override fun fetchUserProfile(
+        userUUID: String,
+        callback: RequestCallback<Pair<UserAuth, Boolean?>>
+    ) {
         Handler(Looper.getMainLooper()).postDelayed({
 
-            val userAuth = Database.usersAuth.firstOrNull { userUUID ==it.userId }
+            val userAuth = Database.usersAuth.firstOrNull { userUUID == it.userId }
 
             if (userAuth != null) {
                 if (userAuth == Database.sessionAuth) {
@@ -40,5 +43,25 @@ class ProfileFakeRemoteDataSource : ProfileDataSource {
 
             callback.onComplete()
         }, 2000)
+    }
+
+    override fun followUser(userUUID: String, isFollow: Boolean, callback: RequestCallback<Boolean>) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            var followers = Database.followers[Database.sessionAuth!!.userId]
+
+            if (followers == null){
+                followers = mutableSetOf()
+                Database.followers[Database.sessionAuth!!.userId] = followers
+            }
+
+            if (isFollow) {
+                Database.followers[Database.sessionAuth!!.userId]!!.add(userUUID)
+            } else {
+                Database.followers[Database.sessionAuth!!.userId]!!.remove(userUUID)
+            }
+            callback.onSuccess(true)
+            callback.onComplete()
+
+        }, 500)
     }
 }

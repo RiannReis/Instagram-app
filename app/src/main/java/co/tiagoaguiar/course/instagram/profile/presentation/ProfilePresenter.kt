@@ -47,6 +47,17 @@ class ProfilePresenter(
         })
     }
 
+    override fun followUser(userUUID: String?, follow: Boolean) {
+        repository.followUser(userUUID!!, follow, object : RequestCallback<Boolean> {
+            override fun onSuccess(data: Boolean) { }
+
+            override fun onFailure(message: String) { }
+
+            override fun onComplete() { }
+
+        })
+    }
+
     override fun onDestroy() {
         view = null
     }
