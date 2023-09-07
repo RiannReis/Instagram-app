@@ -8,10 +8,10 @@ class HomeRepository(private val dataSourceFactory: HomeDataSourceFactory) {
 
     fun fetchFeed(callback: RequestCallback<List<Post>>) {
         val localDataSource = dataSourceFactory.createLocalDataSource()
-        val userAuth = localDataSource.fetchSession()
+        val uId = localDataSource.fetchSession()
 
         val dataSource = dataSourceFactory.createFromFeed()
-        dataSource.fetchFeed(userAuth.userId, object : RequestCallback<List<Post>> {
+        dataSource.fetchFeed(uId, object : RequestCallback<List<Post>> {
             override fun onSuccess(data: List<Post>) {
                 localDataSource.putFeed(data)
                 callback.onSuccess(data)
