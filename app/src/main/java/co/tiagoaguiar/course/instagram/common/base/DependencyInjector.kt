@@ -4,6 +4,7 @@ import android.content.Context
 import co.tiagoaguiar.course.instagram.add.data.AddFakeRemoteDataSource
 import co.tiagoaguiar.course.instagram.add.data.AddLocalDataSource
 import co.tiagoaguiar.course.instagram.add.data.AddRepository
+import co.tiagoaguiar.course.instagram.add.data.FireAddDataSource
 import co.tiagoaguiar.course.instagram.home.data.HomeDataSourceFactory
 import co.tiagoaguiar.course.instagram.home.data.HomeFeedMemoryCache
 import co.tiagoaguiar.course.instagram.home.data.HomeRepository
@@ -48,7 +49,7 @@ object DependencyInjector {
     }
 
     fun addRepository(): AddRepository {
-        return AddRepository(AddFakeRemoteDataSource(), AddLocalDataSource())
+        return AddRepository(FireAddDataSource(), AddLocalDataSource())
     }
 
     fun postRepository(context: Context): PostRepository {
