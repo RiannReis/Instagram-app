@@ -7,11 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import co.tiagoaguiar.course.instagram.R
+import co.tiagoaguiar.course.instagram.common.model.User
 import co.tiagoaguiar.course.instagram.common.model.UserAuth
+import com.bumptech.glide.Glide
 
 class SearchAdapter(private val itemClick: (String) -> Unit) : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
-    var items: List<UserAuth> = mutableListOf()
+    var items: List<User> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         return SearchViewHolder(
@@ -28,11 +30,15 @@ class SearchAdapter(private val itemClick: (String) -> Unit) : RecyclerView.Adap
     }
 
     inner class SearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(user: UserAuth) {
-            itemView.findViewById<ImageView>(R.id.search_img_user).setImageURI(user.photoUri)
+        fun bind(user: User) {
+
+            Glide.with(itemView.context).load(user.photoUrl).into(itemView.findViewById(R.id.search_img_user))
+
             itemView.findViewById<TextView>(R.id.search_txt_username).text = user.name
             itemView.setOnClickListener {
-                itemClick.invoke(user.userId)
+                if (user.userId != null) {
+                    itemClick.invoke(user.userId)
+                }
             }
         }
     }
