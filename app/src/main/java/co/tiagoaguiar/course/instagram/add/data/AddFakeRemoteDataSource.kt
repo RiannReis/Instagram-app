@@ -26,10 +26,10 @@ class AddFakeRemoteDataSource : AddDataSource {
 
             val post = Post(
                 UUID.randomUUID().toString(),
-                uri,
+                null,
                 caption,
                 System.currentTimeMillis(),
-                Database.sessionAuth!!
+                null
             )
 
             posts.add(post)
