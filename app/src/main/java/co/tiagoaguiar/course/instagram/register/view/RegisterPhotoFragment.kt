@@ -1,6 +1,8 @@
 package co.tiagoaguiar.course.instagram.register.view
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
@@ -9,9 +11,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import co.tiagoaguiar.course.instagram.R
@@ -19,10 +22,16 @@ import co.tiagoaguiar.course.instagram.common.base.DependencyInjector
 import co.tiagoaguiar.course.instagram.common.view.CropperImageFragment
 import co.tiagoaguiar.course.instagram.common.view.CustomDialog
 import co.tiagoaguiar.course.instagram.databinding.FragmentRegisterPhotoBinding
+import co.tiagoaguiar.course.instagram.post.view.AddFragment
 import co.tiagoaguiar.course.instagram.register.RegisterPhoto
 import co.tiagoaguiar.course.instagram.register.presentation.RegisterPhotoPresenter
 
 class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo), RegisterPhoto.View {
+
+    companion object {
+        private val REQUIRED_PERMISSION =
+            arrayOf(Manifest.permission.CAMERA)
+    }
 
     private var binding: FragmentRegisterPhotoBinding? = null
     private var fragmentAttachListener: FragmentAttachListener? = null
@@ -61,9 +70,9 @@ class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo), Regist
                     fragmentAttachListener?.goToMainScreen()
                 }
 
-                    registerBtnPhoto.isEnabled = true
-                    registerBtnPhoto.setOnClickListener {
-                        openDialog()
+                registerBtnPhoto.isEnabled = true
+                registerBtnPhoto.setOnClickListener {
+                    openDialog()
 
                 }
             }
@@ -101,7 +110,11 @@ class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo), Regist
         customDialog.addButton(R.string.photo, R.string.gallery) {
             when (it.id) {
                 R.string.photo -> {
-                    fragmentAttachListener?.goToCameraScreen()
+                    if (allPermissionsGranted()) {
+                        fragmentAttachListener?.goToCameraScreen()
+                    } else {
+                        getPermission.launch(REQUIRED_PERMISSION)
+                    }
                 }
                 R.string.gallery -> {
                     fragmentAttachListener?.goToGalleryScreen()
@@ -110,6 +123,26 @@ class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo), Regist
         }
         customDialog.show()
     }
+
+    private fun allPermissionsGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            REQUIRED_PERMISSION[0]
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private val getPermission =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { granted ->
+            if (allPermissionsGranted()) {
+                fragmentAttachListener?.goToCameraScreen()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    R.string.permission_camera_denied,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
 
     private fun onCropImageResult(uri: Uri?) {
         if (uri != null) {
