@@ -107,8 +107,8 @@ class FireProfileDataSource : ProfileDataSource {
             )
             .addOnSuccessListener { res ->
                 followingCounter(uid, isFollow)
-                followersCounter(userUUID)
-                callback.onSuccess(true)
+                followersCounter(userUUID, callback)
+                updateFeed(userUUID, isFollow)
 
             }
             .addOnFailureListener { exception ->
@@ -125,8 +125,9 @@ class FireProfileDataSource : ProfileDataSource {
                         )
                         .addOnSuccessListener { res ->
                             followingCounter(uid, isFollow)
-                            followersCounter(userUUID)
-                            callback.onSuccess(true)
+                            followersCounter(userUUID, callback)
+                            updateFeed(userUUID, isFollow)
+
                         }
                         .addOnFailureListener { exception ->
                             callback.onFailure(
@@ -144,6 +145,40 @@ class FireProfileDataSource : ProfileDataSource {
             }
     }
 
+    fun updateFeed(uid: String, isFollow: Boolean) {
+        if (!isFollow) {
+            FirebaseFirestore.getInstance()
+                .collection("/feeds")
+                .document(FirebaseAuth.getInstance().uid!!)
+                .collection("posts")
+                .whereEqualTo("publisher.userId", uid)
+                .get()
+                .addOnSuccessListener { res ->
+                    val documents = res.documents
+                    for (document in documents) {
+                        document.reference.delete()
+                    }
+                }
+        } else {
+            FirebaseFirestore.getInstance()
+                .collection("/posts")
+                .document(uid)
+                .collection("posts")
+                .get()
+                .addOnSuccessListener { res ->
+                    val posts = res.toObjects(Post::class.java)
+                    posts.lastOrNull()?.let {
+                        FirebaseFirestore.getInstance()
+                            .collection("/feeds")
+                            .document(FirebaseAuth.getInstance().uid!!)
+                            .collection("posts")
+                            .document(it.uuid!!)
+                            .set(it)
+                    }
+                }
+        }
+    }
+
     private fun followingCounter(uid: String, isFollow: Boolean) {
         val meRef = FirebaseFirestore.getInstance()
             .collection("/users")
@@ -153,7 +188,7 @@ class FireProfileDataSource : ProfileDataSource {
         else meRef.update("following", FieldValue.increment(-1))
     }
 
-    private fun followersCounter(uid: String) {
+    private fun followersCounter(uid: String, callback: RequestCallback<Boolean>) {
         val meRef = FirebaseFirestore.getInstance()
             .collection("/users")
             .document(uid)
@@ -167,6 +202,7 @@ class FireProfileDataSource : ProfileDataSource {
                     val list = response.get("followers") as List<String>
                     meRef.update("followers", list.size)
                 }
+                callback.onSuccess(true)
             }
     }
 }

@@ -33,11 +33,16 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     private var userId: String? = null
 
     private var logoutListener: LogoutListener? = null
+    private var followListener: FollowListener? = null
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is LogoutListener){
             logoutListener = context
+        }
+        if (context is FollowListener){
+            followListener = context
         }
     }
 
@@ -116,6 +121,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
         adapter.notifyDataSetChanged()
     }
 
+    override fun followUpdated() {
+        followListener?.followUpdated()
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.menu_profile_grid -> {
@@ -136,5 +145,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    interface FollowListener {
+        fun followUpdated()
     }
 }

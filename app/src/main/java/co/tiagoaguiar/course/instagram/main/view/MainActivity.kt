@@ -11,11 +11,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import co.tiagoaguiar.course.instagram.R
-import co.tiagoaguiar.course.instagram.post.view.AddFragment
 import co.tiagoaguiar.course.instagram.common.extension.changeFragment
 import co.tiagoaguiar.course.instagram.databinding.ActivityMainBinding
 import co.tiagoaguiar.course.instagram.home.view.HomeFragment
 import co.tiagoaguiar.course.instagram.main.LogoutListener
+import co.tiagoaguiar.course.instagram.post.view.AddFragment
 import co.tiagoaguiar.course.instagram.profile.view.ProfileFragment
 import co.tiagoaguiar.course.instagram.search.view.SearchFragment
 import co.tiagoaguiar.course.instagram.splash.view.SplashActivity
@@ -23,7 +23,8 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
-    AddFragment.AddListener, SearchFragment.SearchListener, LogoutListener {
+    AddFragment.AddListener, SearchFragment.SearchListener, ProfileFragment.FollowListener,
+    LogoutListener {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -133,6 +134,14 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             replace(R.id.main_activity, fragment, fragment.javaClass.simpleName + "detail")
             addToBackStack(null)
             commit()
+        }
+    }
+
+    override fun followUpdated() {
+        homeFragment.presenter.clear()
+
+        if (supportFragmentManager.findFragmentByTag(profileFragment.javaClass.simpleName) != null) {
+            profileFragment.presenter.clear()
         }
     }
 
