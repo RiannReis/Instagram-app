@@ -15,8 +15,8 @@
         android:id="@+id/add_tab"
         android:layout_width="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:tabIndicatorColor="@color/black"
-        app:tabSelectedTextColor="@color/black"
+        app:tabIndicatorColor="?colorPrimary"
+        app:tabSelectedTextColor="?colorPrimary"
         app:tabTextColor="@color/gray_text"
         android:layout_height="wrap_content"/>
 

@@ -1,9 +1,15 @@
 package co.tiagoaguiar.course.instagram.login.view
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
+import android.view.WindowInsetsController
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import co.tiagoaguiar.course.instagram.R
 import co.tiagoaguiar.course.instagram.common.base.DependencyInjector
 import co.tiagoaguiar.course.instagram.common.util.TxtWatcher
 import co.tiagoaguiar.course.instagram.databinding.ActivityLoginBinding
@@ -28,6 +34,16 @@ class LoginActivity : AppCompatActivity(), Login.View {
         presenter = LoginPresenter(this, DependencyInjector.loginRepository())
 
         with(binding) {
+            when (resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                Configuration.UI_MODE_NIGHT_YES -> {
+                    loginImgLogo.imageTintList = ColorStateList.valueOf(Color.WHITE)
+
+                }
+                Configuration.UI_MODE_NIGHT_NO -> {
+
+                }
+            }
+
             loginEditEmail.addTextChangedListener(watcher)
             loginEditEmail.addTextChangedListener(TxtWatcher {
                 displayEmailFailure(null)

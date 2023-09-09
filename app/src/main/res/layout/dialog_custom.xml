@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="@string/define_photo_profile"
         android:layout_margin="12dp"
-        android:textColor="@color/black"/>
+        android:textColor="?colorPrimary"/>
 
     <View
         android:layout_width="match_parent"
