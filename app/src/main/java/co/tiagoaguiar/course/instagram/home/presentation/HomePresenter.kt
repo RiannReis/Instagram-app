@@ -38,4 +38,8 @@ class HomePresenter(
     override fun clear() {
         repository.clearCache()
     }
+
+    override fun logOut() {
+        repository.logOut()
+    }
 }

@@ -107,7 +107,7 @@ class FireProfileDataSource : ProfileDataSource {
             )
             .addOnSuccessListener { res ->
                 followingCounter(uid, isFollow)
-                followersCounter(uid)
+                followersCounter(userUUID)
                 callback.onSuccess(true)
 
             }
@@ -125,7 +125,7 @@ class FireProfileDataSource : ProfileDataSource {
                         )
                         .addOnSuccessListener { res ->
                             followingCounter(uid, isFollow)
-                            followersCounter(uid)
+                            followersCounter(userUUID)
                             callback.onSuccess(true)
                         }
                         .addOnFailureListener { exception ->

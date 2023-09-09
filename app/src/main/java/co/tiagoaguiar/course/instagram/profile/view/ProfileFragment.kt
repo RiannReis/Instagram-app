@@ -1,5 +1,6 @@
 package co.tiagoaguiar.course.instagram.profile.view
 
+import android.content.Context
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -11,6 +12,7 @@ import co.tiagoaguiar.course.instagram.common.base.DependencyInjector
 import co.tiagoaguiar.course.instagram.common.model.Post
 import co.tiagoaguiar.course.instagram.common.model.User
 import co.tiagoaguiar.course.instagram.databinding.FragmentProfileBinding
+import co.tiagoaguiar.course.instagram.main.LogoutListener
 import co.tiagoaguiar.course.instagram.profile.Profile
 import co.tiagoaguiar.course.instagram.profile.presentation.ProfilePresenter
 import com.bumptech.glide.Glide
@@ -30,6 +32,15 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     private val adapter = PostAdapter()
     private var userId: String? = null
 
+    private var logoutListener: LogoutListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is LogoutListener){
+            logoutListener = context
+        }
+    }
+
     override fun setupViews() {
         userId = arguments?.getString(KEY_USER_ID)
 
@@ -42,7 +53,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
                 binding?.profileBtnEditProfile?.text = getString(R.string.follow)
                 binding?.profileBtnEditProfile?.tag = false
                 presenter.followUser(userId, false)
-            } else {
+            } else if (it.tag == false) {
                 binding?.profileBtnEditProfile?.text = getString(R.string.unfollow)
                 binding?.profileBtnEditProfile?.tag = true
                 presenter.followUser(userId, true)
@@ -115,5 +126,15 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
             }
         }
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.menu_logout -> {
+                logoutListener?.logOut()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

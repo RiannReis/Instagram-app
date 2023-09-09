@@ -10,6 +10,8 @@ interface HomeDataSource {
 
     fun fetchSession(): String { throw UnsupportedOperationException() }
 
+    fun logOut() { throw UnsupportedOperationException() }
+
     fun putFeed(response: List<Post>?) { throw UnsupportedOperationException() }
 
 

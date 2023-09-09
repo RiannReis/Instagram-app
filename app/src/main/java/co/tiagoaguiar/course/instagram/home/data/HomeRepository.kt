@@ -31,4 +31,8 @@ class HomeRepository(private val dataSourceFactory: HomeDataSourceFactory) {
         var localDataSource = dataSourceFactory.createLocalDataSource()
         localDataSource.putFeed(null)
     }
+
+    fun logOut() {
+        dataSourceFactory.createRemoteDataSource().logOut()
+    }
 }
