@@ -44,7 +44,7 @@ class FireAddDataSource : AddDataSource {
                                     photoUrl = resDownload.toString(),
                                     caption = caption,
                                     timestamp = System.currentTimeMillis(),
-                                    pubblisher = me
+                                    publisher = me
                                 )
 
                                 postRef.set(post)

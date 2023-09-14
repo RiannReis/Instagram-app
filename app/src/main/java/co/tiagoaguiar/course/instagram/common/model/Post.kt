@@ -7,5 +7,5 @@ data class Post(
     val photoUrl: String? = null,
     val caption: String? = null,
     val timestamp: Long = 0,
-    val pubblisher: User? = null
+    val publisher: User? = null
 )

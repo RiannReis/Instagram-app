@@ -23,7 +23,7 @@ class RegisterFakeDataSource : RegisterDataSource {
         }, 2000)
     }
 
-    override fun create(email: String, name: String, password: String, callback: RegisterCallback) {
+    override fun create(email: String, name: String, bio: String, password: String, callback: RegisterCallback) {
         Handler(Looper.getMainLooper()).postDelayed({
 
             val userAuth = Database.usersAuth.firstOrNull { email == it.email }

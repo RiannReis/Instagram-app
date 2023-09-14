@@ -27,7 +27,7 @@ class FireRegisterDataSource : RegisterDataSource {
             }
     }
 
-    override fun create(email: String, name: String, password: String, callback: RegisterCallback) {
+    override fun create(email: String, name: String, bio: String, password: String, callback: RegisterCallback) {
         FirebaseAuth.getInstance()
             .createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener { result ->
@@ -43,6 +43,7 @@ class FireRegisterDataSource : RegisterDataSource {
                             hashMapOf(
                                 "name" to name,
                                 "email" to email,
+                                "bio" to bio,
                                 "followers" to 0,
                                 "following" to 0,
                                 "postCount" to 0,
@@ -99,7 +100,7 @@ class FireRegisterDataSource : RegisterDataSource {
                                         }
                                         .addOnFailureListener { exception ->
                                             callback.onFailure(
-                                                exception.message ?: "Falha ao atualzar a foto"
+                                                exception.message ?: "Falha ao atualizar a foto"
                                             )
                                         }
                                         .addOnCompleteListener {

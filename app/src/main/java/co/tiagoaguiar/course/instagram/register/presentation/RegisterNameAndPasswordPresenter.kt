@@ -34,7 +34,7 @@ class RegisterNameAndPasswordPresenter(
         if (isNameValid && isPasswordValid && isConfirmValid) {
             view?.showProgress(true)
 
-            repository.create(email, name, password, object : RegisterCallback {
+            repository.create(email, name, bio="Sua descrição...", password, object : RegisterCallback {
                 override fun onSuccess() {
                     view?.onCreateSuccess(name)
                 }

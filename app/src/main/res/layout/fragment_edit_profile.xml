@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/edit_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/edit_profile_btn_save"
+            style="@style/Theme.Instagram.Link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/edit_profile_btn_cancel"
+            style="@style/Theme.Instagram.Link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_img_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="64dp"
+            android:src="@drawable/ic_insta_profile_thin"
+            app:civ_border_color="@color/gray"
+            app:civ_border_width="1dp"
+            app:civ_circle_background_color="@color/gray_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/photo_update_btn"
+            style="@style/Theme.Instagram.Link"
+            android:text="@string/photo_update_msg"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_img_icon" />
+
+        <TextView
+            android:id="@+id/edit_user_txt"
+            style="@style/Theme.Instagram.TextViewProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/user_edit"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_profile_txt_username"
+            app:layout_constraintEnd_toStartOf="@+id/edit_profile_txt_username"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/edit_profile_txt_username" />
+
+        <EditText
+            android:id="@+id/edit_profile_txt_username"
+            style="@style/Theme.Instagram.TextViewProfile"
+            android:layout_margin="8dp"
+            android:hint="@string/username"
+            android:maxLines="1"
+            android:maxLength="30"
+            android:textAlignment="textStart"
+            app:layout_constraintBottom_toTopOf="@id/edit_profile_txt_bio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/edit_user_txt"
+            app:layout_constraintTop_toBottomOf="@id/photo_update_btn" />
+
+        <TextView
+            android:id="@+id/edit_bio_txt"
+            style="@style/Theme.Instagram.TextViewProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/edit_bio"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@id/edit_profile_txt_bio"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_user_txt" />
+
+        <EditText
+            android:id="@+id/edit_profile_txt_bio"
+            style="@style/Theme.Instagram.TextViewProfile"
+            android:layout_margin="8dp"
+            android:hint="@string/description_bio"
+            android:maxLines="3"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_bio_txt" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/edit_profile_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/edit_profile_txt_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/empty_list"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</FrameLayout>

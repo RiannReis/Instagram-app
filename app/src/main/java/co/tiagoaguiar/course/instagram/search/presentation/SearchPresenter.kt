@@ -1,11 +1,7 @@
 package co.tiagoaguiar.course.instagram.search.presentation
 
 import co.tiagoaguiar.course.instagram.common.base.RequestCallback
-import co.tiagoaguiar.course.instagram.common.model.Post
 import co.tiagoaguiar.course.instagram.common.model.User
-import co.tiagoaguiar.course.instagram.common.model.UserAuth
-import co.tiagoaguiar.course.instagram.profile.Profile
-import co.tiagoaguiar.course.instagram.profile.model.ProfileRepository
 import co.tiagoaguiar.course.instagram.search.Search
 import co.tiagoaguiar.course.instagram.search.data.SearchRepository
 

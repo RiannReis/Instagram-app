@@ -52,4 +52,8 @@
     <string name="permission_camera_denied">Permissão não concedida. Habilite nas configurações do seu smartphone.</string>
     <string name="hint_post_photo">Escreva alguma coisa ...</string>
     <string name="description_profile">Sua descrição...</string>
+    <string name="user_edit">Edite o seu user:</string>
+    <string name="photo_update_msg">Clique aqui para editar sua foto</string>
+    <string name="description_bio">Descrição...</string>
+    <string name="edit_bio">Edite sua Bio:</string>
 </resources>

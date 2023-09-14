@@ -8,8 +8,8 @@ class RegisterRepository(private val dataSource: RegisterDataSource) {
         dataSource.create(email, callback)
     }
 
-    fun create(email: String, name: String, password: String, callback: RegisterCallback) {
-        dataSource.create(email, name, password, callback)
+    fun create(email: String, name: String, bio: String, password: String, callback: RegisterCallback) {
+        dataSource.create(email, name, bio, password, callback)
     }
 
     fun updateUser(photoUri: Uri, callback: RegisterCallback) {

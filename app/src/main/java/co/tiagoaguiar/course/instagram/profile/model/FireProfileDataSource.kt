@@ -1,5 +1,6 @@
 package co.tiagoaguiar.course.instagram.profile.model
 
+import android.net.Uri
 import co.tiagoaguiar.course.instagram.common.base.RequestCallback
 import co.tiagoaguiar.course.instagram.common.model.Post
 import co.tiagoaguiar.course.instagram.common.model.User
@@ -8,6 +9,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FirebaseStorage
 
 class FireProfileDataSource : ProfileDataSource {
     override fun fetchUserProfile(
@@ -199,10 +201,85 @@ class FireProfileDataSource : ProfileDataSource {
             .get()
             .addOnSuccessListener { response ->
                 if (response.exists()) {
-                    val list = response.get("followers") as List<String>
+                    val list = response.get("followers") as List<*>
                     meRef.update("followers", list.size)
                 }
                 callback.onSuccess(true)
             }
     }
+
+    override fun changePhoto(photoUri: Uri, callback: RequestCallback<Pair<User, Boolean?>>) {
+        val uid = FirebaseAuth.getInstance().uid
+        if (uid == null || photoUri.lastPathSegment == null) {
+            callback.onFailure("Usuário não encontrado")
+            return
+        }
+
+        val storageRef = FirebaseStorage.getInstance().reference
+
+        val imgRef = storageRef.child("images/")
+            .child(uid)
+            .child(photoUri.lastPathSegment!!)
+
+        imgRef.putFile(photoUri)
+            .addOnSuccessListener { result ->
+                imgRef.downloadUrl
+                    .addOnSuccessListener { res ->
+                        val usersRef =
+                            FirebaseFirestore.getInstance().collection("/users").document(uid)
+
+                        usersRef.get()
+                            .addOnSuccessListener { document ->
+                                val user = document.toObject(User::class.java)
+                                val newUser = user?.copy(photoUrl = res.toString())
+
+                                if (newUser != null) {
+                                    usersRef.set(newUser)
+                                        .addOnSuccessListener {
+                                            callback.onSuccess(Pair(newUser, null))
+                                        }
+                                        .addOnFailureListener { exception ->
+                                            callback.onFailure(
+                                                exception.message ?: "Falha ao atualizar a foto"
+                                            )
+                                        }
+                                        .addOnCompleteListener {
+                                            callback.onComplete()
+                                        }
+                                }
+                            }
+                    }
+
+            }
+            .addOnFailureListener { exception ->
+                callback.onFailure(exception.message ?: "Erro ao subir a foto")
+            }
+
+    }
+
+    override fun editUserInfos(
+        userUUID: String,
+        name: String,
+        bio: String?,
+        callback: RequestCallback<Boolean>
+    ) {
+        FirebaseFirestore.getInstance()
+            .collection("/users")
+            .document(userUUID)
+            .update(
+                mapOf(
+                    "name" to name,
+                    "bio" to bio
+                )
+            )
+            .addOnSuccessListener { res ->
+                callback.onSuccess(true)
+            }
+            .addOnFailureListener { exception ->
+                callback.onFailure(exception.message ?: "Erro ao atualizar os campos")
+            }
+
+    }
+
+
 }

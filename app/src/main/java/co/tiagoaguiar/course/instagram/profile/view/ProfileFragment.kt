@@ -38,10 +38,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is LogoutListener){
+        if (context is LogoutListener) {
             logoutListener = context
         }
-        if (context is FollowListener){
+        if (context is FollowListener) {
             followListener = context
         }
     }
@@ -62,7 +62,16 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
                 binding?.profileBtnEditProfile?.text = getString(R.string.unfollow)
                 binding?.profileBtnEditProfile?.tag = true
                 presenter.followUser(userId, true)
+            } else {
+                val editProfileFragment = EditProfileFragment()
+                val fragmentManager = parentFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.main_activity, editProfileFragment)
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
+
             }
+
         }
 
         presenter.fetchUserProfile(userId)
@@ -88,13 +97,13 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
         binding?.profileTxtFollowingCount?.text = userAuth.following.toString()
         binding?.profileTxtFollowersCount?.text = userAuth.followers.toString()
         binding?.profileTxtUsername?.text = userAuth.name
-        binding?.profileTxtBio?.text = getString(R.string.description_profile)
+        binding?.profileTxtBio?.text = userAuth.bio
 
         binding?.let {
             Glide.with(requireContext()).load(userAuth.photoUrl).into(it.profileImgIcon)
         }
 
-        binding?.profileBtnEditProfile?.text = when(following) {
+        binding?.profileBtnEditProfile?.text = when (following) {
             null -> getString(R.string.edit_profile)
             true -> getString(R.string.unfollow)
             false -> getString(R.string.follow)
@@ -126,7 +135,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.menu_profile_grid -> {
                 binding?.profileRv?.layoutManager = GridLayoutManager(requireContext(), 3)
             }
@@ -138,7 +147,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.menu_logout -> {
                 logoutListener?.logOut()
                 return true
@@ -150,4 +159,5 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     interface FollowListener {
         fun followUpdated()
     }
+
 }

@@ -2,10 +2,8 @@ package co.tiagoaguiar.course.instagram.profile.model
 
 import co.tiagoaguiar.course.instagram.common.base.Cache
 import co.tiagoaguiar.course.instagram.common.base.RequestCallback
-import co.tiagoaguiar.course.instagram.common.model.Database
 import co.tiagoaguiar.course.instagram.common.model.Post
 import co.tiagoaguiar.course.instagram.common.model.User
-import co.tiagoaguiar.course.instagram.common.model.UserAuth
 import com.google.firebase.auth.FirebaseAuth
 import java.lang.RuntimeException
 

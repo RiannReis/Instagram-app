@@ -5,7 +5,6 @@ import android.os.Looper
 import co.tiagoaguiar.course.instagram.common.base.RequestCallback
 import co.tiagoaguiar.course.instagram.common.model.Database
 import co.tiagoaguiar.course.instagram.common.model.Post
-import co.tiagoaguiar.course.instagram.common.model.UserAuth
 
 class HomeFakeRemoteDataSource : HomeDataSource {
     override fun fetchFeed(userUUID: String, callback: RequestCallback<List<Post>>) {

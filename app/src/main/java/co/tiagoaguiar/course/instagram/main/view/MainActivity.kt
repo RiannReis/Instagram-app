@@ -4,32 +4,49 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
 import android.view.MenuItem
 import android.view.WindowInsetsController
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import co.tiagoaguiar.course.instagram.R
 import co.tiagoaguiar.course.instagram.common.extension.changeFragment
+import co.tiagoaguiar.course.instagram.common.view.CropperImageFragment
 import co.tiagoaguiar.course.instagram.databinding.ActivityMainBinding
 import co.tiagoaguiar.course.instagram.home.view.HomeFragment
 import co.tiagoaguiar.course.instagram.main.LogoutListener
 import co.tiagoaguiar.course.instagram.post.view.AddFragment
+import co.tiagoaguiar.course.instagram.profile.view.EditProfileFragment
+import co.tiagoaguiar.course.instagram.profile.view.FragmentAttachEditProfileListener
 import co.tiagoaguiar.course.instagram.profile.view.ProfileFragment
+import co.tiagoaguiar.course.instagram.register.view.RegisterWelcomeFragment
 import co.tiagoaguiar.course.instagram.search.view.SearchFragment
 import co.tiagoaguiar.course.instagram.splash.view.SplashActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
     AddFragment.AddListener, SearchFragment.SearchListener, ProfileFragment.FollowListener,
-    LogoutListener {
+    LogoutListener, FragmentAttachEditProfileListener, EditProfileFragment.EditProfileListener {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var currentPhoto: Uri
+
 
     private lateinit var homeFragment: HomeFragment
     private lateinit var searchFragment: Fragment
@@ -80,11 +97,19 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var scrollToolbarEnabled = false
+
         when(item.itemId) {
             android.R.id.home -> {
-                changeFragment(R.id.main_activity, addFragment)
+                if (currentFragment == addFragment) return false
+                currentFragment = addFragment
+                scrollToolbarEnabled = false
             }
         }
+        setScrollToolbarEnabled(scrollToolbarEnabled)
+
+        currentFragment?.let { changeFragment(R.id.main_activity, it) }
+
         return super.onOptionsItemSelected(item)
     }
 
@@ -158,6 +183,14 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
+    override fun editProfileUpdated() {
+        homeFragment.presenter.clear()
+
+        if (supportFragmentManager.findFragmentByTag(profileFragment.javaClass.simpleName) != null) {
+            profileFragment.presenter.clear()
+        }
+    }
+
     override fun followUpdated() {
         homeFragment.presenter.clear()
 
@@ -178,5 +211,66 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_in)
+    }
+
+    override fun goToMainScreen() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
+
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let { openImageCropper(it) }
+    }
+
+    override fun goToGalleryScreen() {
+        getContent.launch("image/*")
+    }
+
+    private val getCamera = registerForActivityResult(ActivityResultContracts.TakePicture()) { saved ->
+        if (saved) {
+            openImageCropper(currentPhoto)
+        }
+    }
+
+    override fun goToCameraScreen() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (intent.resolveActivity(packageManager) != null) {
+
+            val photoFile: File? = try {
+                createImageFile()
+
+            } catch (e: IOException){
+                Log.e("MainActivity", e.message, e)
+                null
+            }
+
+            photoFile?.also {
+                val photoUri = FileProvider.getUriForFile(this, "co.tiagoaguiar.course.instagram.fileprovider", it)
+                currentPhoto = photoUri
+
+                getCamera.launch(photoUri)
+            }
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile("JPEG_${timeStamp}", ".jpg", dir)
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        changeFragment(R.id.main_activity, fragment)
+    }
+
+    private fun openImageCropper(uri: Uri){
+        val fragment = CropperImageFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(CropperImageFragment.KEY_URI, uri)
+            }
+        }
+        replaceFragment(fragment)
     }
 }
